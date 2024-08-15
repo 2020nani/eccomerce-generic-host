@@ -2,19 +2,22 @@ import { AppModule } from './app.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { loadRemoteModule } from '@angular-architects/module-federation';
+import { AppComponent } from './app.component';
 
 const APP_ROUTES: Routes = [
   {
-    path: 'store',
-    loadChildren: () =>
-      loadRemoteModule({
-        type: 'module',
-        remoteEntry: 'http://localhost:4201/remoteEntry.js',
-        exposedModule: './Module',
-      }).then((m) => m.AppModule),
+    path: '',
+    component: AppComponent,
+    children: [
+      {
+        path: 'teste',
+        loadChildren: () =>
+          import('./store/store.module').then((m) => m.StoreModule),
+      },
+    ],
   },
   {
-    path: 'admin',
+    path: 'store',
     loadChildren: () => {
       const baseUrl = 'http://localhost:4201';
       return loadAdminStyles().then(() =>
